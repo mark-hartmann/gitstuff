@@ -29,13 +29,13 @@ git_status() {
     # S changes have been stashed
     # P local commits need to be pushed to the remote
     local status="$(git status --porcelain 2>/dev/null)"
-    local output=''
+    local output=' '
     [[ -n $(egrep '^[MADRC]' <<<"$status") ]] && output="$output+"
     [[ -n $(egrep '^.[MD]' <<<"$status") ]] && output="$output!"
     [[ -n $(egrep '^\?\?' <<<"$status") ]] && output="$output?"
     [[ -n $(git stash list) ]] && output="${output}S"
     [[ -n $(git log --branches --not --remotes) ]] && output="${output}P"
-    [[ -n $output ]] && output="|$output"  # separate from branch name
+    [[ -n $output ]] && output="$output"  # separate from branch name
     echo $output
 }
 
@@ -78,5 +78,5 @@ git_prompt() {
 
 # Sample prompt declaration. Tweak as you see fit, or just stick
 # "$(git_prompt)" into your favorite prompt.
-PS1='\u@\h:\w$(git_prompt)\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]\u\[\033[01;33m\]: ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\w\[\033[01;33m\] $(git_prompt)\[\033[00m\]\$ '
 
